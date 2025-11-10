@@ -4,8 +4,8 @@ import Link from "next/link";
 import SignOutButton from "@/components/SignOutButton";
 
 export default function Navbar() {
+  // console.log("✅ Navbar loaded!");
   return (
-    console.log("✅ ActionBar loaded!");
     <nav className="flex items-center justify-between px-6 py-3 bg-white border-b">
       {/* Left side: logo and links */}
       <div className="flex items-center space-x-6">
