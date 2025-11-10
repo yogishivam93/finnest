@@ -43,7 +43,7 @@ export default function AdvisorsTable() {
     // Subscribe without returning a promise from the effect cleanup
     ch.subscribe(() => {});
     return () => {
-      supabase.removeChannel(ch);
+      void supabase.removeChannel(ch);
     };
   }, []);
 
