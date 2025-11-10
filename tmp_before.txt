@@ -1,0 +1,191 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  Legend,
+} from "recharts";
+import { useCurrency } from "@/context/CurrencyProvider";
+
+type Asset = {
+  id: string;
+  type?: string | null;
+  current_value: number | null;
+  currency?: string | null;
+};
+
+type Liability = {
+  id: string;
+  current_value: number | null;
+};
+
+const COLORS = [
+  "#22c55e",
+  "#ef4444",
+  "#3b82f6",
+  "#f59e0b",
+  "#8b5cf6",
+  "#06b6d4",
+  "#10b981",
+  "#e11d48",
+];
+
+export default function ChartsCard({ title }: { title?: string }) {
+  const { convert, format } = useCurrency();
+  const [assets, setAssets] = useState<Asset[]>([]);
+  const [liabilities, setLiabilities] = useState<Liability[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [chartType, setChartType] = useState<"pie" | "donut">("pie");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchData() {
+      setLoading(true);
+      const [{ data: a }, { data: l }] = await Promise.all([
+        supabase.from("assets").select("id,type,current_value,currency"),
+        supabase.from("liabilities").select("id,current_value"),
+      ]);
+
+      if (!cancelled) {
+        setAssets((a ?? []) as Asset[]);
+        setLiabilities((l ?? []) as Liability[]);
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+
+    const ch = supabase
+      .channel("dashboard-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "assets" },
+        () => fetchData()
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "liabilities" },
+        () => fetchData()
+      )
+      .subscribe();
+
+    return () => {
+      cancelled = true;
+      supabase.removeChannel(ch);
+    };
+  }, []);
+
+  const totalsData = useMemo(() => {
+    const totalAssets =
+      assets.reduce(
+        (sum, a) => sum + convert(Number(a.current_value) || 0, a.currency),
+        0
+      ) || 0;
+
+    const totalLiabs =
+      liabilities.reduce((sum, l) => sum + (Number(l.current_value) || 0), 0) ||
+      0;
+
+    return [
+      { name: "Total Assets", value: totalAssets },
+      { name: "Liabilities", value: totalLiabs },
+    ];
+  }, [assets, liabilities, convert]);
+
+  const byCategory = useMemo(() => {
+    const bucket = new Map<string, number>();
+    for (const a of assets) {
+      const key = (a.type ?? "Other").trim() || "Other";
+      const val = convert(Number(a.current_value) || 0, a.currency);
+      bucket.set(key, (bucket.get(key) ?? 0) + val);
+    }
+    return Array.from(bucket.entries())
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value);
+  }, [assets, convert]);
+
+  const innerRadius = chartType === "donut" ? 70 : 0;
+
+  return (
+    <div className="rounded-lg border bg-white p-4">
+      <div className="mb-4 flex items-center justify-between">
+        <div className="text-sm font-medium">{title ?? "Financial Overview"}</div>
+        <div className="flex items-center gap-2">
+          <label className="text-xs text-gray-600">Chart</label>
+          <select
+            className="rounded-md border px-2 py-1 text-xs"
+            value={chartType}
+            onChange={(e) => setChartType(e.target.value as "pie" | "donut")}
+          >
+            <option value="pie">Pie</option>
+            <option value="donut">Donut</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div>
+          <div className="mb-2 text-sm font-medium">Assets vs Liabilities</div>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={totalsData}
+                  dataKey="value"
+                  nameKey="name"
+                  innerRadius={innerRadius}
+                  outerRadius={100}
+                  paddingAngle={2}
+                  isAnimationActive={!loading}
+                  animationBegin={100}
+                  animationDuration={850}
+                  animationEasing="ease-out"
+                >
+                  {totalsData.map((_, i) => (
+                    <Cell key={i} fill={i === 0 ? COLORS[0] : COLORS[1]} />
+                  ))}
+                </Pie>
+                <Tooltip formatter={(v: number) => format(v)} contentStyle={{ fontSize: 12 }} />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div>
+          <div className="mb-2 text-sm font-medium">Assets by Category</div>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={byCategory}
+                  dataKey="value"
+                  nameKey="name"
+                  innerRadius={innerRadius}
+                  outerRadius={100}
+                  paddingAngle={2}
+                  isAnimationActive={!loading}
+                  animationBegin={100}
+                  animationDuration={850}
+                  animationEasing="ease-out"
+                >
+                  {byCategory.map((_, i) => (
+                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip formatter={(v: number) => format(v)} />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

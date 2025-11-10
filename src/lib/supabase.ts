@@ -1,14 +1,20 @@
 // src/lib/supabase.ts
 import { createClient } from "@supabase/supabase-js";
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+// read NEXT_PUBLIC_* so it works in the browser
+const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-if (!url || !anon) {
-  // Helpful error if env vars are missing
+if (!url || !key) {
+  // temporary helpful message
+  // eslint-disable-next-line no-console
+  console.error("ENV MISSING in supabase.ts", { url, keyPresent: !!key });
   throw new Error(
-    "Missing Supabase env vars. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local"
+    "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY. " +
+      "Check .env.local and restart `npm run dev`."
   );
 }
 
-export const supabase = createClient(url, anon);
+export const supabase = createClient(url, key, {
+  auth: { persistSession: true, autoRefreshToken: true },
+});

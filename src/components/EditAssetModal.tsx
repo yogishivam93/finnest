@@ -1,24 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+
+type Asset = {
+  id: number;
+  name: string | null;
+  type: string | null;
+  country: string | null;
+  currency: string | null;
+  current_value: number | null;
+};
 
 type Props = {
   open: boolean;
+  asset: Asset | null;
   onClose: () => void;
   onSaved?: () => void;
 };
 
-export default function AddAssetModal({ open, onClose, onSaved }: Props) {
+const currencies = ["AUD", "USD", "INR", "EUR", "GBP", "NZD"];
+const types = ["BANK", "INVESTMENT", "PROPERTY", "CRYPTO", "SUPER", "OTHER"];
+
+export default function EditAssetModal({ open, asset, onClose, onSaved }: Props) {
   const [name, setName] = useState("");
   const [type, setType] = useState("BANK");
   const [country, setCountry] = useState("Australia");
   const [currency, setCurrency] = useState("AUD");
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<string>("0");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  if (!open) return null;
+  useEffect(() => {
+    if (!asset) return;
+    setName(asset.name ?? "");
+    setType(asset.type ?? "BANK");
+    setCountry(asset.country ?? "Australia");
+    setCurrency((asset.currency ?? "AUD").toUpperCase());
+    setValue(String(asset.current_value ?? "0"));
+  }, [asset]);
+
+  if (!open || !asset) return null;
 
   async function save() {
     try {
@@ -29,32 +51,22 @@ export default function AddAssetModal({ open, onClose, onSaved }: Props) {
         throw new Error("Name and value are required.");
       }
 
-      const { data: u } = await supabase.auth.getUser();
-      const uid = u?.user?.id;
-      if (!uid) throw new Error("You must be logged in.");
-
-      const { error } = await supabase.from("assets").insert([
-        {
-          owner_id: uid,
-          name,
+      const { error } = await supabase
+        .from("assets")
+        .update({
+          name: name.trim(),
           type,
-          country,
-          currency,
+          country: country.trim(),
+          currency: currency.toUpperCase(),
           current_value: Number(value),
-        },
-      ]);
-      if (error) throw error;
+        })
+        .eq("id", asset.id);
 
-      // reset & close
-      setName("");
-      setType("BANK");
-      setCountry("Australia");
-      setCurrency("AUD");
-      setValue("");
-      onClose();
+      if (error) throw error;
       onSaved?.();
+      onClose();
     } catch (e: any) {
-      setError(e?.message ?? "Failed to save.");
+      setError(e?.message ?? "Failed to update asset.");
     } finally {
       setSaving(false);
     }
@@ -64,17 +76,19 @@ export default function AddAssetModal({ open, onClose, onSaved }: Props) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="w-full max-w-md rounded-2xl bg-white p-4 shadow-xl">
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Add Asset</h3>
+          <h3 className="text-lg font-semibold">Edit Asset</h3>
           <button
             className="rounded-md px-2 py-1 text-sm text-gray-600 hover:bg-gray-100"
             onClick={onClose}
           >
-            ✕
+            Close
           </button>
         </div>
 
         {error && (
-          <p className="mb-2 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
+          <p className="mb-2 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+            {error}
+          </p>
         )}
 
         <div className="space-y-3">
@@ -96,7 +110,7 @@ export default function AddAssetModal({ open, onClose, onSaved }: Props) {
                 value={type}
                 onChange={(e) => setType(e.target.value)}
               >
-                {["BANK", "INVESTMENT", "PROPERTY", "SUPER", "OTHER"].map((t) => (
+                {types.map((t) => (
                   <option key={t}>{t}</option>
                 ))}
               </select>
@@ -115,12 +129,15 @@ export default function AddAssetModal({ open, onClose, onSaved }: Props) {
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
               <label className="block text-sm font-medium text-gray-600">Currency</label>
-              <input
+              <select
                 className="mt-1 w-full rounded-lg border px-2 py-1 text-sm"
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value.toUpperCase())}
-                placeholder="AUD"
-              />
+              >
+                {currencies.map((c) => (
+                  <option key={c}>{c}</option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-600">Current Value</label>
@@ -130,6 +147,8 @@ export default function AddAssetModal({ open, onClose, onSaved }: Props) {
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 placeholder="10000"
+                min={0}
+                step="0.01"
               />
             </div>
           </div>
@@ -144,10 +163,11 @@ export default function AddAssetModal({ open, onClose, onSaved }: Props) {
             onClick={save}
             disabled={saving}
           >
-            {saving ? "Saving…" : "Save"}
+            {saving ? "Saving..." : "Save"}
           </button>
         </div>
       </div>
     </div>
   );
 }
+

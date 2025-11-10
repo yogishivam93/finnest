@@ -3,10 +3,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import SignOutButton from "@/components/SignOutButton";
 
 const nav = [
   { href: "/", label: "Dashboard" },
   { href: "/assets", label: "Assets" },
+  { href: "/people", label: "People" },
   { href: "/accounts", label: "Accounts" },
   { href: "/settings", label: "Settings" },
 ];
@@ -38,9 +40,7 @@ export default function Header() {
           })}
         </nav>
 
-        <button className="rounded-xl border px-3 py-1.5 text-sm hover:bg-gray-50">
-          + Add Asset
-        </button>
+        <SignOutButton />
       </div>
     </header>
   );

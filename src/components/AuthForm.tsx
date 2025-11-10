@@ -1,32 +1,37 @@
+// src/components/AuthForm.tsx
 "use client";
-
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 export default function AuthForm() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle"|"sending"|"sent"|"error">("idle");
-  const [msg, setMsg] = useState<string>("");
+  const [message, setMessage] = useState("");
 
-  async function onSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStatus("sending");
-    setMsg("");
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: "http://localhost:3000" }
-    });
-    if (error) {
-      setStatus("error");
-      setMsg(error.message);
-    } else {
+    setMessage("");
+
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          shouldCreateUser: true,
+        },
+      });
+      if (error) throw error;
       setStatus("sent");
-      setMsg("Check your email for the sign-in link.");
+      setMessage("Magic link sent! Check your email.");
+    } catch (err: any) {
+      setStatus("error");
+      setMessage(err?.message || "Could not send magic link.");
     }
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-3 max-w-sm">
+    <form onSubmit={handleSubmit} className="space-y-3 max-w-sm">
       <label className="block text-sm font-medium">Email</label>
       <input
         type="email"
@@ -34,16 +39,20 @@ export default function AuthForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="you@example.com"
-        className="w-full rounded-xl border px-3 py-2"
+        className="w-full rounded border px-3 py-2"
       />
       <button
         type="submit"
-        disabled={status==="sending"}
-        className="rounded-xl bg-gray-900 px-4 py-2 text-white hover:opacity-90 disabled:opacity-50"
+        disabled={status === "sending"}
+        className="rounded bg-black px-3 py-2 text-white disabled:opacity-60"
       >
-        {status==="sending" ? "Sending..." : "Send magic link"}
+        {status === "sending" ? "Sending…" : "Send magic link"}
       </button>
-      {msg && <p className="text-sm text-gray-600">{msg}</p>}
+      {message && (
+        <p className={status === "error" ? "text-red-600 text-sm" : "text-green-600 text-sm"}>
+          {message}
+        </p>
+      )}
     </form>
   );
 }
