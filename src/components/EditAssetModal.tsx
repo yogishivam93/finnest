@@ -51,6 +51,12 @@ export default function EditAssetModal({ open, asset, onClose, onSaved }: Props)
         throw new Error("Name and value are required.");
       }
 
+      // Guard: asset can be null in props; ensure we have an id
+      if (!asset) {
+        throw new Error("No asset selected to update.");
+      }
+      const id = asset.id;
+
       const { error } = await supabase
         .from("assets")
         .update({
@@ -60,7 +66,7 @@ export default function EditAssetModal({ open, asset, onClose, onSaved }: Props)
           currency: currency.toUpperCase(),
           current_value: Number(value),
         })
-        .eq("id", asset.id);
+        .eq("id", id);
 
       if (error) throw error;
       onSaved?.();
@@ -170,4 +176,3 @@ export default function EditAssetModal({ open, asset, onClose, onSaved }: Props)
     </div>
   );
 }
-
