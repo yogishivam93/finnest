@@ -1,14 +1,14 @@
 // src/app/auth/callback/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
-export default function AuthCallback() {
+function CallbackContent() {
   const router = useRouter();
   const params = useSearchParams();
-  const [msg, setMsg] = useState("Finishing sign-in…");
+  const [msg, setMsg] = useState("Finishing sign-in...");
 
   useEffect(() => {
     (async () => {
@@ -31,10 +31,19 @@ export default function AuthCallback() {
         return;
       }
 
-      setMsg("Signed in! Redirecting…");
+      setMsg("Signed in! Redirecting...");
       router.replace(next);
     })();
   }, [params, router]);
 
   return <div className="p-6 text-sm">{msg}</div>;
 }
+
+export default function AuthCallback() {
+  return (
+    <Suspense fallback={<div className="p-6 text-sm">Finishing sign-in...</div>}>
+      <CallbackContent />
+    </Suspense>
+  );
+}
+
