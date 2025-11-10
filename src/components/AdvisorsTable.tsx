@@ -35,9 +35,16 @@ export default function AdvisorsTable() {
     load();
     const ch = supabase
       .channel("advisors-ui")
-      .on("postgres_changes", { event: "*", schema: "public", table: "advisors" }, () => load())
-      .subscribe();
-    return () => supabase.removeChannel(ch);
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "advisors" },
+        () => load()
+      );
+    // Subscribe without returning a promise from the effect cleanup
+    ch.subscribe(() => {});
+    return () => {
+      supabase.removeChannel(ch);
+    };
   }, []);
 
   async function remove(id: number) {
@@ -105,4 +112,3 @@ export default function AdvisorsTable() {
     </section>
   );
 }
-
