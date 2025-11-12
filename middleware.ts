@@ -28,6 +28,12 @@ export function middleware(req: NextRequest) {
     pathname.startsWith("/share/") ||
     pathname.startsWith("/api/")
   ) {
+    // Ensure the root always serves the marketing page even if any stale cache exists
+    if (pathname === "/") {
+      const url = req.nextUrl.clone();
+      url.pathname = "/home";
+      return NextResponse.rewrite(url);
+    }
     return NextResponse.next();
   }
 

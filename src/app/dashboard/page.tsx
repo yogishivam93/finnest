@@ -19,7 +19,10 @@ export default function DashboardPage() {
           <ActionBar />
 
         {/* Charts at the top (full width) */}
-        <ChartsCard title="Financial Overview" />
+        <section className="space-y-2">
+          <h2 className="text-xl font-semibold">Financial Overview</h2>
+          <ChartsCard />
+        </section>
 
         {/* Your Assets section (cards only on dashboard) */}
         <AssetCardGrid onView={(id) => setSelectedId(id)} />
