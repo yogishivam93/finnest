@@ -19,6 +19,18 @@ const PROTECTED = [
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // Public routes: always allow
+  if (
+    pathname === "/" ||
+    pathname === "/login" ||
+    pathname === "/signup" ||
+    pathname.startsWith("/auth/") ||
+    pathname.startsWith("/share/") ||
+    pathname.startsWith("/api/")
+  ) {
+    return NextResponse.next();
+  }
+
   // only run for protected routes
   const needsAuth = PROTECTED.some((p) => pathname.startsWith(p));
   if (!needsAuth) return NextResponse.next();
