@@ -1,11 +1,13 @@
 // src/app/settings/page.tsx
 import SettingsForm from "@/components/SettingsForm";
+import RequireAuth from "@/components/RequireAuth";
 
 export default function SettingsPage() {
   return (
-    <main className="p-6">
-      <SettingsForm />
-    </main>
+    <RequireAuth>
+      <main className="p-6">
+        <SettingsForm />
+      </main>
+    </RequireAuth>
   );
 }
-

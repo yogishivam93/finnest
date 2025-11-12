@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
-export default function LoginPage() {
-  const router = useRouter();
+export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,22 +24,10 @@ export default function LoginPage() {
     }
   }
 
-  async function oauth(provider: "google" | "github") {
-    setLoading(true);
-    setError(null);
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({ provider, options: { redirectTo: `${location.origin}/auth/callback` } });
-      if (error) throw error;
-    } catch (e: any) {
-      setError(e?.message ?? "Unable to start sign in");
-      setLoading(false);
-    }
-  }
-
   return (
     <main className="mx-auto max-w-md p-6">
-      <h1 className="text-2xl font-semibold">Log in</h1>
-      <p className="mt-1 text-sm text-gray-600 dark:text-slate-300">Welcome back to FinNest.</p>
+      <h1 className="text-2xl font-semibold">Create your account</h1>
+      <p className="mt-1 text-sm text-gray-600 dark:text-slate-300">We’ll email you a secure sign‑in link.</p>
 
       <form onSubmit={sendMagicLink} className="mt-6 space-y-3">
         <label className="block text-sm">
@@ -63,20 +49,11 @@ export default function LoginPage() {
           {sent ? "Resend magic link" : "Send magic link"}
         </button>
         {error ? <p className="text-sm text-red-600">{error}</p> : null}
-        {sent ? <p className="text-sm text-emerald-600">Check your email for a login link.</p> : null}
+        {sent ? <p className="text-sm text-emerald-600">Check your email for a sign‑in link.</p> : null}
       </form>
 
-      <div className="mt-6 space-y-2">
-        <button onClick={() => oauth("google")} className="w-full rounded-md border px-4 py-2 text-sm hover:bg-gray-50 dark:border-slate-700 dark:hover:bg-slate-800">
-          Continue with Google
-        </button>
-        <button onClick={() => oauth("github")} className="w-full rounded-md border px-4 py-2 text-sm hover:bg-gray-50 dark:border-slate-700 dark:hover:bg-slate-800">
-          Continue with GitHub
-        </button>
-      </div>
-
       <p className="mt-4 text-center text-sm">
-        New to FinNest? <a href="/signup" className="text-blue-600 hover:underline">Create an account</a>
+        Already have an account? <a href="/login" className="text-blue-600 hover:underline">Log in</a>
       </p>
     </main>
   );

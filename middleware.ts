@@ -2,7 +2,19 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const PROTECTED = ["/assets", "/accounts", "/settings"];
+const PROTECTED = [
+  "/dashboard",
+  "/assets",
+  "/liabilities",
+  "/accounts",
+  "/people",
+  "/beneficiaries",
+  "/advisors",
+  "/locker",
+  "/documents",
+  "/settings",
+  "/emergency",
+];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -11,10 +23,12 @@ export function middleware(req: NextRequest) {
   const needsAuth = PROTECTED.some((p) => pathname.startsWith(p));
   if (!needsAuth) return NextResponse.next();
 
-  // We store Supabase session in a cookie named "sb:token" variants.
-  // Minimal check: if no cookie starting with "sb", send to /login.
-  const hasSbCookie = req.cookies.getAll().some((c) => c.name.startsWith("sb"));
-  if (!hasSbCookie) {
+  // Check for Supabase auth cookies set by @supabase/auth-helpers or supabase-js
+  const hasSupabaseCookie = req.cookies.getAll().some((c) => {
+    const n = c.name.toLowerCase();
+    return n.startsWith("sb") || n.startsWith("supabase") || n.includes("sb-");
+  });
+  if (!hasSupabaseCookie) {
     const url = req.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("redirectedFrom", pathname);
@@ -25,5 +39,17 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/assets/:path*", "/accounts/:path*", "/settings/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/assets/:path*",
+    "/liabilities/:path*",
+    "/accounts/:path*",
+    "/people/:path*",
+    "/beneficiaries/:path*",
+    "/advisors/:path*",
+    "/locker/:path*",
+    "/documents/:path*",
+    "/settings/:path*",
+    "/emergency/:path*",
+  ],
 };

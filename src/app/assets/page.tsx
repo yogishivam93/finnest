@@ -5,15 +5,18 @@ import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AssetCardGrid from "@/components/AssetCardGrid";
 import AssetDetailsModal from "@/components/AssetDetailsModal";
+import RequireAuth from "@/components/RequireAuth";
 
 export default function AssetsPage() {
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Assets</h1>
-      <Suspense fallback={<div className="rounded-2xl border p-6 text-sm text-gray-500 dark:border-slate-800 dark:text-slate-400">Loading…</div>}>
-        <AssetsClient />
-      </Suspense>
-    </div>
+    <RequireAuth>
+      <div className="space-y-6">
+        <h1 className="text-2xl font-semibold">Assets</h1>
+        <Suspense fallback={<div className="rounded-2xl border p-6 text-sm text-gray-500 dark:border-slate-800 dark:text-slate-400">Loading…</div>}>
+          <AssetsClient />
+        </Suspense>
+      </div>
+    </RequireAuth>
   );
 }
 

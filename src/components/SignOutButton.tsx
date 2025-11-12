@@ -11,6 +11,10 @@ export default function SignOutButton() {
     try {
       setLoading(true);
       await supabase.auth.signOut();
+      try {
+        // Clear marketing/middleware auth hint cookie
+        document.cookie = "fn_auth=; Max-Age=0; Path=/";
+      } catch {}
       router.push("/login");
       router.refresh();
     } catch (e) {
