@@ -73,17 +73,17 @@ export default function SummaryCards() {
       {cards.map((c) => (
         <div
           key={c.label}
-          className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
+          className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-900"
         >
-          <p className="text-xs font-medium tracking-wide text-gray-500">{c.label}</p>
+          <p className="text-xs font-medium tracking-wide text-gray-500 dark:text-slate-400">{c.label}</p>
           {loading ? (
-            <div className="mt-3 h-8 w-32 animate-pulse rounded-md bg-gray-100" />
+            <div className="mt-3 h-8 w-32 animate-pulse rounded-md bg-gray-100 dark:bg-slate-800" />
           ) : (
-            <p className="mt-2 text-3xl font-semibold text-gray-900">
+            <p className="mt-2 text-3xl font-semibold text-gray-900 dark:text-slate-100">
               <CountUp value={c.value} formatter={format} />
             </p>
           )}
-          <p className="mt-1 text-xs text-gray-400">Live total</p>
+          <p className="mt-1 text-xs text-gray-400 dark:text-slate-500">Live total</p>
         </div>
       ))}
     </div>

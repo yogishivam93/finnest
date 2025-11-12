@@ -27,12 +27,26 @@ export default function LiabilitiesTable() {
     const { data: userRes } = await supabase.auth.getUser();
     const uid = userRes?.user?.id;
 
-    const q = supabase
+    // Try selecting with description first; if the column doesn't exist, fall back without it.
+    let q = supabase
       .from("liabilities")
       .select("id,type,description,currency,current_value")
       .order("id", { ascending: false });
 
-    const { data, error } = uid ? await q.eq("owner_id", uid) : await q;
+    let { data, error } = uid ? await q.eq("owner_id", uid) : await q;
+    if (error && /description/i.test(error.message || "")) {
+      const q2 = supabase
+        .from("liabilities")
+        .select("id,type,currency,current_value")
+        .order("id", { ascending: false });
+      const res2 = uid ? await q2.eq("owner_id", uid) : await q2;
+      if (!res2.error && res2.data) {
+        // Map to typed shape with description as null
+        setLiabs((res2.data as any[]).map((r) => ({ ...r, description: null })) as Liability[]);
+        setLoading(false);
+        return;
+      }
+    }
     if (!error && data) setLiabs(data as Liability[]);
     setLoading(false);
   }

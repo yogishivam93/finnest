@@ -54,7 +54,7 @@ export default function AdvisorsTable() {
   }
 
   return (
-    <section className="rounded-2xl border bg-white p-4 shadow-sm">
+    <section className="rounded-2xl border bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
       <div className="mb-3 flex items-center justify-between">
         <h2 className="text-lg font-semibold">Advisors</h2>
         <button
@@ -69,16 +69,16 @@ export default function AdvisorsTable() {
       </div>
 
       {loading ? (
-        <p className="text-sm text-gray-500">Loading...</p>
+        <p className="text-sm text-gray-500 dark:text-slate-400">Loading...</p>
       ) : error ? (
         <p className="text-sm text-red-600">{error}</p>
       ) : rows.length === 0 ? (
-        <p className="text-sm text-gray-500">No advisors yet.</p>
+        <p className="text-sm text-gray-500 dark:text-slate-400">No advisors yet.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead>
-              <tr className="border-b bg-gray-50 text-left text-xs font-semibold uppercase text-gray-500">
+              <tr className="border-b bg-gray-50 text-left text-xs font-semibold uppercase text-gray-500 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700">
                 <th className="p-2">Name</th>
                 <th className="p-2">Email</th>
                 <th className="p-2">Company</th>
@@ -87,7 +87,7 @@ export default function AdvisorsTable() {
             </thead>
             <tbody>
               {rows.map((r) => (
-                <tr key={r.id} className="border-b hover:bg-gray-50">
+                <tr key={r.id} className="border-b hover:bg-gray-50 dark:border-slate-800 dark:hover:bg-slate-800">
                   <td className="p-2">{r.name}</td>
                   <td className="p-2">{r.email}</td>
                   <td className="p-2">{r.company}</td>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
@@ -127,7 +127,7 @@ export default function BeneficiaryModal({ open, onClose, onSaved, beneficiary }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-slate-900 dark:border dark:border-slate-800">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-semibold">
             {beneficiary ? "Edit Beneficiary" : "Add Beneficiary"}
@@ -137,33 +137,33 @@ export default function BeneficiaryModal({ open, onClose, onSaved, beneficiary }
             disabled={saving}
             className="rounded-full p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
           >
-            ✕
+            âœ•
           </button>
         </div>
 
         <form onSubmit={save} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">
               Name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700 dark:placeholder-slate-400"
               placeholder="Full name"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">
               Relationship <span className="text-red-500">*</span>
             </label>
             <select
               value={relationship}
               onChange={(e) => setRelationship(e.target.value as Relationship)}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700"
               required
             >
               {RELATIONSHIPS.map((rel) => (
@@ -175,26 +175,26 @@ export default function BeneficiaryModal({ open, onClose, onSaved, beneficiary }
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">
               Email
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700 dark:placeholder-slate-400"
               placeholder="email@example.com"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">
               Country
             </label>
             <select
               value={country}
               onChange={(e) => setCountry(e.target.value as Country)}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700"
             >
               {COUNTRIES.map((c) => (
                 <option key={c} value={c}>
@@ -205,7 +205,7 @@ export default function BeneficiaryModal({ open, onClose, onSaved, beneficiary }
           </div>
 
           {error && (
-            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20">
               {error}
             </div>
           )}
@@ -215,7 +215,7 @@ export default function BeneficiaryModal({ open, onClose, onSaved, beneficiary }
               type="button"
               onClick={onClose}
               disabled={saving}
-              className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-slate-700 dark:hover:bg-slate-800 dark:text-slate-300"
             >
               Cancel
             </button>
@@ -232,3 +232,4 @@ export default function BeneficiaryModal({ open, onClose, onSaved, beneficiary }
     </div>
   );
 }
+

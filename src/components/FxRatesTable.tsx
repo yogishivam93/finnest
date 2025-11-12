@@ -1,4 +1,4 @@
-// src/components/FxRatesTable.tsx
+﻿// src/components/FxRatesTable.tsx
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -60,8 +60,8 @@ export default function FxRatesTable() {
     if (loading) {
       return (
         <tr>
-          <td className="py-3 text-gray-500" colSpan={5}>
-            Loading…
+          <td className="py-3 text-gray-500 dark:text-slate-400" colSpan={5}>
+            Loadingâ€¦
           </td>
         </tr>
       );
@@ -78,23 +78,23 @@ export default function FxRatesTable() {
     if (!rows.length) {
       return (
         <tr>
-          <td className="py-3 text-gray-500" colSpan={5}>
+          <td className="py-3 text-gray-500 dark:text-slate-400" colSpan={5}>
             No rates yet. Click “+ Add Rate”.
           </td>
         </tr>
       );
     }
     return rows.map((r) => (
-      <tr key={r.id} className="border-t">
+      <tr key={r.id} className="border-t dark:border-slate-800">
         <td className="py-2 pr-4 font-mono">{r.base}</td>
         <td className="py-2 pr-4 font-mono">{r.quote}</td>
         <td className="py-2 pr-4">{Number(r.rate).toLocaleString()}</td>
         <td className="py-2 pr-4">
-          {r.updated_at ? new Date(r.updated_at).toLocaleString() : "—"}
+          {r.updated_at ? new Date(r.updated_at).toLocaleString() : "â€”"}
         </td>
         <td className="py-2 flex gap-2">
           <button
-            className="rounded-lg border px-3 py-1.5 text-sm hover:bg-gray-50"
+            className="rounded-lg border px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-slate-800 dark:border-slate-700"
             onClick={() => {
               setEditing(r);
               setModalOpen(true);
@@ -103,7 +103,7 @@ export default function FxRatesTable() {
             Edit
           </button>
           <button
-            className="rounded-lg border px-3 py-1.5 text-sm hover:bg-gray-50"
+            className="rounded-lg border px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-slate-800 dark:border-slate-700"
             onClick={() => handleDelete(r.id)}
           >
             Delete
@@ -115,7 +115,7 @@ export default function FxRatesTable() {
 
   return (
     <>
-      <section className="rounded-2xl border bg-white p-4 shadow-sm">
+      <section className="rounded-2xl border bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="mb-2 flex items-center justify-between">
           <h2 className="text-lg font-semibold">FX Rates</h2>
           <button
@@ -123,24 +123,24 @@ export default function FxRatesTable() {
               setEditing(null);
               setModalOpen(true);
             }}
-            className="rounded-lg border px-3 py-1.5 text-sm hover:bg-gray-50"
+            className="rounded-lg border px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-slate-800 dark:border-slate-700"
           >
             + Add Rate
           </button>
         </div>
-        <div className="mb-3 text-xs text-gray-500">
+        <div className="mb-3 text-xs text-gray-500 dark:text-slate-400">
           Auto-refresh enabled. {loading ? (
-            <span className="text-gray-700">Refreshing…</span>
+            <span className="text-gray-700">Refreshingâ€¦</span>
           ) : lastRefreshed ? (
             <>Last updated {lastRefreshed.toLocaleTimeString()}</>
           ) : (
-            <>Waiting for first update…</>
+            <>Waiting for first updateâ€¦</>
           )}
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="text-gray-600">
+            <thead className="text-gray-600 dark:text-slate-300">
               <tr>
                 <th className="py-2 pr-4">Base</th>
                 <th className="py-2 pr-4">Quote</th>
@@ -163,3 +163,6 @@ export default function FxRatesTable() {
     </>
   );
 }
+
+
+

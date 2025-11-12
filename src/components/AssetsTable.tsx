@@ -6,17 +6,19 @@ import { Plus, Trash2, Pencil } from "lucide-react";
 import AddAssetModal from "./AddAssetModal";
 import EditAssetModal from "./EditAssetModal";
 import { useCurrency } from "@/context/CurrencyProvider";
+import { ASSET_TYPES } from "@/types/asset";
 
 type Asset = {
   id: number;
   name: string | null;
   type: string | null;
+  institution?: string | null;
   country: string | null;
   currency: string | null;
   current_value: number | null;
 };
 
-const typeOptions = ["ALL", "BANK", "INVESTMENT", "PROPERTY", "CRYPTO", "SUPER", "OTHER"];
+const typeOptions = ["ALL", ...ASSET_TYPES];
 const currencyOptions = ["ALL", "AUD", "USD", "INR", "EUR", "GBP", "NZD"];
 
 export default function AssetsTable() {
@@ -37,7 +39,7 @@ export default function AssetsTable() {
 
     const q = supabase
       .from("assets")
-      .select("id,name,type,country,currency,current_value")
+      .select("id,name,type,institution,country,currency,current_value")
       .order("id", { ascending: false });
 
     const { data, error } = uid ? await q.eq("owner_id", uid) : await q;
@@ -87,18 +89,18 @@ export default function AssetsTable() {
   }, [rows, search, typeFilter, currencyFilter]);
 
   return (
-    <section className="rounded-2xl border bg-white p-4 shadow-sm">
+    <section className="rounded-2xl border bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
       <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-lg font-semibold">Assets</h2>
         <div className="flex flex-wrap items-center gap-2">
           <input
-            className="w-40 rounded-md border px-2 py-1 text-sm"
+            className="w-40 rounded-md border px-2 py-1 text-sm bg-white text-gray-900 placeholder-gray-400 border-gray-300 dark:bg-slate-900 dark:text-slate-200 dark:placeholder-slate-400 dark:border-slate-700"
             placeholder="Search name/country"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
           <select
-            className="rounded-md border px-2 py-1 text-sm"
+            className="rounded-md border px-2 py-1 text-sm bg-white text-gray-900 border-gray-300 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700"
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
             title="Filter by type"
@@ -110,7 +112,7 @@ export default function AssetsTable() {
             ))}
           </select>
           <select
-            className="rounded-md border px-2 py-1 text-sm"
+            className="rounded-md border px-2 py-1 text-sm bg-white text-gray-900 border-gray-300 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700"
             value={currencyFilter}
             onChange={(e) => setCurrencyFilter(e.target.value)}
             title="Filter by currency"
@@ -132,16 +134,17 @@ export default function AssetsTable() {
       </div>
 
       {loading ? (
-        <p className="text-sm text-gray-500">Loading...</p>
+        <p className="text-sm text-gray-500 dark:text-slate-400">Loading...</p>
       ) : filtered.length === 0 ? (
-        <p className="text-sm text-gray-500">No assets match your filters.</p>
+        <p className="text-sm text-gray-500 dark:text-slate-400">No assets match your filters.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead>
-              <tr className="border-b bg-gray-50 text-left text-xs font-semibold uppercase text-gray-500">
+              <tr className="border-b bg-gray-50 text-left text-xs font-semibold uppercase text-gray-500 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700">
                 <th className="p-2">Name</th>
                 <th className="p-2">Type</th>
+                <th className="p-2">Institution</th>
                 <th className="p-2">Country</th>
                 <th className="p-2">Currency</th>
                 <th className="p-2">Value (display)</th>
@@ -152,9 +155,10 @@ export default function AssetsTable() {
               {filtered.map((r) => {
                 const display = format(convert(Number(r.current_value) || 0, r.currency));
                 return (
-                  <tr key={r.id} className="border-b hover:bg-gray-50">
+                  <tr key={r.id} className="border-b hover:bg-gray-50 dark:border-slate-800 dark:hover:bg-slate-800">
                     <td className="p-2">{r.name}</td>
                     <td className="p-2">{r.type}</td>
+                    <td className="p-2">{r.institution}</td>
                     <td className="p-2">{r.country}</td>
                     <td className="p-2">{r.currency}</td>
                     <td className="p-2">{display}</td>

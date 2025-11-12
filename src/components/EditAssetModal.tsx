@@ -1,12 +1,14 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { ASSET_TYPES, type AssetType } from "@/types/asset";
 
 type Asset = {
   id: number;
   name: string | null;
   type: string | null;
+  institution?: string | null;
   country: string | null;
   currency: string | null;
   current_value: number | null;
@@ -20,11 +22,11 @@ type Props = {
 };
 
 const currencies = ["AUD", "USD", "INR", "EUR", "GBP", "NZD"];
-const types = ["BANK", "INVESTMENT", "PROPERTY", "CRYPTO", "SUPER", "OTHER"];
 
 export default function EditAssetModal({ open, asset, onClose, onSaved }: Props) {
   const [name, setName] = useState("");
-  const [type, setType] = useState("BANK");
+  const [institution, setInstitution] = useState("");
+  const [type, setType] = useState<AssetType>("BANK");
   const [country, setCountry] = useState("Australia");
   const [currency, setCurrency] = useState("AUD");
   const [value, setValue] = useState<string>("0");
@@ -34,7 +36,8 @@ export default function EditAssetModal({ open, asset, onClose, onSaved }: Props)
   useEffect(() => {
     if (!asset) return;
     setName(asset.name ?? "");
-    setType(asset.type ?? "BANK");
+    setInstitution(asset.institution ?? "");
+    setType(((asset.type ?? "BANK").toUpperCase() as AssetType) || "BANK");
     setCountry(asset.country ?? "Australia");
     setCurrency((asset.currency ?? "AUD").toUpperCase());
     setValue(String(asset.current_value ?? "0"));
@@ -61,6 +64,7 @@ export default function EditAssetModal({ open, asset, onClose, onSaved }: Props)
         .from("assets")
         .update({
           name: name.trim(),
+          institution: institution.trim() || null,
           type,
           country: country.trim(),
           currency: currency.toUpperCase(),
@@ -80,11 +84,11 @@ export default function EditAssetModal({ open, asset, onClose, onSaved }: Props)
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-md rounded-2xl bg-white p-4 shadow-xl">
+      <div className="w-full max-w-md rounded-2xl bg-white p-4 shadow-xl dark:bg-slate-900 dark:border dark:border-slate-800">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="text-lg font-semibold">Edit Asset</h3>
           <button
-            className="rounded-md px-2 py-1 text-sm text-gray-600 hover:bg-gray-100"
+            className="rounded-md px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 dark:text-slate-300 dark:hover:bg-slate-800"
             onClick={onClose}
           >
             Close
@@ -99,9 +103,9 @@ export default function EditAssetModal({ open, asset, onClose, onSaved }: Props)
 
         <div className="space-y-3">
           <div>
-            <label className="block text-sm font-medium text-gray-600">Name</label>
+            <label className="block text-sm font-medium text-gray-600 dark:text-slate-300">Name</label>
             <input
-              className="mt-1 w-full rounded-lg border px-2 py-1 text-sm"
+              className="mt-1 w-full rounded-lg border px-2 py-1 text-sm bg-white text-gray-900 border-gray-300 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700 placeholder-gray-400 dark:placeholder-slate-400"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Savings Account / ETFs / Term Deposit"
@@ -110,33 +114,42 @@ export default function EditAssetModal({ open, asset, onClose, onSaved }: Props)
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium text-gray-600">Type</label>
+              <label className="block text-sm font-medium text-gray-600 dark:text-slate-300">Type</label>
               <select
-                className="mt-1 w-full rounded-lg border px-2 py-1 text-sm"
+                className="mt-1 w-full rounded-lg border px-2 py-1 text-sm bg-white text-gray-900 border-gray-300 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700"
                 value={type}
-                onChange={(e) => setType(e.target.value)}
+                onChange={(e) => setType(e.target.value as AssetType)}
               >
-                {types.map((t) => (
+                {ASSET_TYPES.map((t: AssetType) => (
                   <option key={t}>{t}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-600">Country</label>
+              <label className="block text-sm font-medium text-gray-600 dark:text-slate-300">Institution</label>
               <input
-                className="mt-1 w-full rounded-lg border px-2 py-1 text-sm"
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                placeholder="Australia"
+                className="mt-1 w-full rounded-lg border px-2 py-1 text-sm bg-white text-gray-900 border-gray-300 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700 placeholder-gray-400 dark:placeholder-slate-400"
+                value={institution}
+                onChange={(e) => setInstitution(e.target.value)}
+                placeholder="Bank/Provider (optional)"
               />
             </div>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium text-gray-600">Currency</label>
+              <label className="block text-sm font-medium text-gray-600 dark:text-slate-300">Country</label>
+              <input
+                className="mt-1 w-full rounded-lg border px-2 py-1 text-sm bg-white text-gray-900 border-gray-300 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700 placeholder-gray-400 dark:placeholder-slate-400"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                placeholder="Australia"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-600 dark:text-slate-300">Currency</label>
               <select
-                className="mt-1 w-full rounded-lg border px-2 py-1 text-sm"
+                className="mt-1 w-full rounded-lg border px-2 py-1 text-sm bg-white text-gray-900 border-gray-300 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700"
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value.toUpperCase())}
               >
@@ -146,10 +159,10 @@ export default function EditAssetModal({ open, asset, onClose, onSaved }: Props)
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-600">Current Value</label>
+              <label className="block text-sm font-medium text-gray-600 dark:text-slate-300">Current Value</label>
               <input
                 type="number"
-                className="mt-1 w-full rounded-lg border px-2 py-1 text-sm"
+                className="mt-1 w-full rounded-lg border px-2 py-1 text-sm bg-white text-gray-900 border-gray-300 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700 placeholder-gray-400 dark:placeholder-slate-400"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 placeholder="10000"
@@ -161,7 +174,7 @@ export default function EditAssetModal({ open, asset, onClose, onSaved }: Props)
         </div>
 
         <div className="mt-4 flex justify-end gap-2">
-          <button className="rounded-lg border px-3 py-1 text-sm" onClick={onClose} disabled={saving}>
+          <button className="rounded-lg border px-3 py-1 text-sm dark:border-slate-700 dark:hover:bg-slate-800" onClick={onClose} disabled={saving}>
             Cancel
           </button>
           <button
@@ -176,3 +189,4 @@ export default function EditAssetModal({ open, asset, onClose, onSaved }: Props)
     </div>
   );
 }
+

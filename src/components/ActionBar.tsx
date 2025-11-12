@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Users, Briefcase } from "lucide-react";
+import { Plus, Users, Briefcase, MinusCircle } from "lucide-react";
 import CurrencySelector from "@/components/CurrencySelector";
 import AddAssetModal from "@/components/AddAssetModal";
 import ShareAssetsModal from "@/components/ShareAssetsModal";
+import AddLiabilityModal from "@/components/AddLiabilityModal";
 
 export default function ActionBar() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [openLiab, setOpenLiab] = useState(false);
   const [shareOpen, setShareOpen] = useState<null | "beneficiary" | "advisor">(null);
 
   return (
@@ -35,15 +37,22 @@ export default function ActionBar() {
         </button>
 
         <button
+          onClick={() => setOpenLiab(true)}
+          className="inline-flex items-center gap-2 rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-red-700"
+        >
+          <MinusCircle size={16} /> Add Liability
+        </button>
+
+        <button
           onClick={() => setShareOpen("beneficiary")}
-          className="inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium hover:bg-gray-50"
+          className="inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium hover:bg-gray-50 dark:border-slate-700 dark:hover:bg-slate-800"
         >
           <Users size={16} /> Share with Beneficiary
         </button>
 
         <button
           onClick={() => setShareOpen("advisor")}
-          className="inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium hover:bg-gray-50"
+          className="inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium hover:bg-gray-50 dark:border-slate-700 dark:hover:bg-slate-800"
         >
           <Briefcase size={16} /> Share with Advisor
         </button>
@@ -54,6 +63,14 @@ export default function ActionBar() {
         onClose={() => setOpen(false)}
         onSaved={() => {
           setOpen(false);
+          router.refresh();
+        }}
+      />
+      <AddLiabilityModal
+        open={openLiab}
+        onClose={() => setOpenLiab(false)}
+        onSaved={() => {
+          setOpenLiab(false);
           router.refresh();
         }}
       />

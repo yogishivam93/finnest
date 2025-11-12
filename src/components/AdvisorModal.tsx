@@ -61,20 +61,20 @@ export default function AdvisorModal({ open, onClose, onSaved, advisor }: Props)
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-5 shadow-xl">
+      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-5 shadow-xl dark:border-slate-800 dark:bg-slate-900">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="text-lg font-semibold">{advisor ? "Edit Advisor" : "Add Advisor"}</h3>
-          <button onClick={onClose} className="rounded-md px-2 py-1 text-sm text-gray-600 hover:bg-gray-100">Close</button>
+          <button onClick={onClose} className="rounded-md px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 dark:text-slate-300 dark:hover:bg-slate-800">Close</button>
         </div>
         {error && <p className="mb-2 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
         <div className="space-y-2">
-          <input className="w-full rounded-md border px-3 py-2 text-sm" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-          <input className="w-full rounded-md border px-3 py-2 text-sm" placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <input className="w-full rounded-md border px-3 py-2 text-sm" placeholder="Company (optional)" value={company} onChange={(e) => setCompany(e.target.value)} />
+          <input className="w-full rounded-md border px-3 py-2 text-sm bg-white text-gray-900 border-gray-300 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700 placeholder-gray-400 dark:placeholder-slate-400" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+          <input className="w-full rounded-md border px-3 py-2 text-sm bg-white text-gray-900 border-gray-300 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700 placeholder-gray-400 dark:placeholder-slate-400" placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input className="w-full rounded-md border px-3 py-2 text-sm bg-white text-gray-900 border-gray-300 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700 placeholder-gray-400 dark:placeholder-slate-400" placeholder="Company (optional)" value={company} onChange={(e) => setCompany(e.target.value)} />
         </div>
 
         <div className="mt-4 flex justify-end gap-2">
-          <button className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-50" onClick={onClose} disabled={saving}>Cancel</button>
+          <button className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-50 dark:hover:bg-slate-800 dark:border-slate-700" onClick={onClose} disabled={saving}>Cancel</button>
           <button className="rounded-md bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700 disabled:opacity-60" onClick={save} disabled={saving}>
             {saving ? "Saving..." : "Save"}
           </button>
@@ -83,4 +83,3 @@ export default function AdvisorModal({ open, onClose, onSaved, advisor }: Props)
     </div>
   );
 }
-

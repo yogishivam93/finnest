@@ -16,6 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('theme');if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}`,
+          }}
+        />
         <CurrencyProvider>
           <Header />
           <main className="page">{children}</main>

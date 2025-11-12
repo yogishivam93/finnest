@@ -80,7 +80,7 @@ export default function BeneficiariesTable() {
   }
 
   return (
-    <div className="rounded-lg border bg-white p-6 shadow-sm">
+    <div className="rounded-lg border bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-lg font-semibold">Beneficiaries</h2>
         <button
@@ -94,11 +94,11 @@ export default function BeneficiariesTable() {
 
       {loading ? (
         <div className="text-center py-4">
-          <div className="animate-pulse text-gray-500">Loading beneficiaries...</div>
+          <div className="animate-pulse text-gray-500 dark:text-slate-400">Loading beneficiaries...</div>
         </div>
       ) : beneficiaries.length === 0 ? (
         <div className="text-center py-8">
-          <p className="text-gray-500">No beneficiaries added yet.</p>
+          <p className="text-gray-500 dark:text-slate-400">No beneficiaries added yet.</p>
           <button
             onClick={handleAddNew}
             className="mt-2 text-blue-600 hover:text-blue-800"
@@ -108,46 +108,46 @@ export default function BeneficiariesTable() {
         </div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-slate-800">
             <thead>
               <tr>
-                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:bg-slate-800 dark:text-slate-300">
                   Name
                 </th>
-                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:bg-slate-800 dark:text-slate-300">
                   Relationship
                 </th>
-                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:bg-slate-800 dark:text-slate-300">
                   Email
                 </th>
-                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:bg-slate-800 dark:text-slate-300">
                   Country
                 </th>
-                <th className="px-6 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:bg-slate-800 dark:text-slate-300">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-slate-800">
               {beneficiaries.map((beneficiary) => (
-                <tr key={beneficiary.id} className="hover:bg-gray-50">
+                <tr key={beneficiary.id} className="hover:bg-gray-50 dark:hover:bg-slate-800">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="text-sm font-medium text-gray-900 dark:text-slate-100">
                       {beneficiary.name}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-gray-500 dark:text-slate-400">
                       {beneficiary.relationship}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-gray-500 dark:text-slate-400">
                       {beneficiary.email || "-"}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-gray-500 dark:text-slate-400">
                       {beneficiary.country || "-"}
                     </div>
                   </td>

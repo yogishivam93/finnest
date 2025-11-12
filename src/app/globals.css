@@ -8,10 +8,16 @@
   --background: #f9fafb;
 }
 
+.dark {
+  --foreground: #e5e7eb;
+  --background: #0b1220; /* slate-950-ish */
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
   min-height: 100vh;
+  transition: background-color 200ms ease, color 200ms ease;
 }
 
 /* Top bar */

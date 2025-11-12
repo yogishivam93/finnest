@@ -1,37 +1,38 @@
 "use client";
 
+import { useState } from "react";
 import ActionBar from "@/components/ActionBar";
 import ChartsCard from "@/components/ChartsCard";
-import SummaryCards from "@/components/SummaryCards";
-import CleanAssetCards from "@/components/CleanAssetCards";
+import AssetCardGrid from "@/components/AssetCardGrid";
 import FxProvidersCard from "@/components/FxProvidersCard";
+import InsightsPanel from "@/components/InsightsPanel";
+import DashboardShell from "@/components/DashboardShell";
+import AssetDetailsModal from "@/components/AssetDetailsModal";
 
 export default function Home() {
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   return (
-    <main className="p-6 space-y-8 bg-gray-50/60">
-      <ActionBar />
+    <DashboardShell>
+      <div className="space-y-6">
+        <ActionBar />
 
-      {/* Charts row: single card with two charts inside */}
-      <div className="grid grid-cols-1 gap-6">
+        {/* Charts at the top (full width) */}
         <ChartsCard title="Financial Overview" />
-      </div>
 
-      {/* KPI cards */}
-      <div className="grid grid-cols-1 gap-6">
-        <SummaryCards />
-      </div>
 
-      {/* Recent assets list */}
-      <div className="space-y-4">
-        <h2 className="text-base font-semibold text-gray-800">Your Assets</h2>
-        <CleanAssetCards />
-      </div>
+        {/* Your Assets section (cards only on dashboard) */}
+        <AssetCardGrid onView={(id) => setSelectedId(id)} />
 
-      {/* FX Rate Comparison under assets */}
-      <div className="space-y-4">
-        <h2 className="text-base font-semibold text-gray-800">FX Rate Comparison</h2>
-        <FxProvidersCard />
+        {/* Bottom row: FX (left) + AI Insights (right) */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <FxProvidersCard />
+          <InsightsPanel />
+        </div>
+
+        {selectedId !== null ? (
+          <AssetDetailsModal id={selectedId} onClose={() => setSelectedId(null)} />
+        ) : null}
       </div>
-    </main>
+    </DashboardShell>
   );
 }
