@@ -43,6 +43,14 @@ type FeatureSummary = {
   soonestInsurance?: { policy: any; days: number; end: string };
 };
 
+type InsuranceRecord = {
+  type: string | null;
+  provider: string | null;
+  endDate: string | null;
+  premium: number | null;
+  deductible: number | null;
+};
+
 function buildFallbackInsights(summary: FeatureSummary) {
   const fallback: { title: string; tone: string; body: string }[] = [];
   if (summary.total <= 0 || summary.assets.length === 0) return fallback;
@@ -202,7 +210,9 @@ export async function POST(req: NextRequest) {
       ? body.emergencyContacts
       : [];
     const documents = Array.isArray(body?.documents) ? body.documents : [];
-    const insurance = Array.isArray(body?.insurance) ? body.insurance : [];
+    const insurance = (Array.isArray(body?.insurance)
+      ? (body.insurance as InsuranceRecord[])
+      : []) as InsuranceRecord[];
     const displayCurrency = body?.currency || "USD";
 
     const total = assets.reduce(

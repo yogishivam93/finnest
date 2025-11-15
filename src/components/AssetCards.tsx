@@ -75,7 +75,7 @@ export default function AssetCards() {
               </div>
               <div className="mt-2 text-xs text-gray-500">
                 <p>
-                  {a.type ?? "—"} · {a.country ?? "—"} · {a.currency ?? "—"}
+                  {a.type ?? "-"} Â· {a.country ?? "-"} Â· {a.currency ?? "-"}
                 </p>
                 <p className="mt-1">
                   Current value:{" "}
@@ -96,4 +96,3 @@ export default function AssetCards() {
     </section>
   );
 }
-

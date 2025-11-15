@@ -69,7 +69,10 @@ export default function LandingPage() {
       {/* Logos / social proof placeholder */}
       <section className="mt-16 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="rounded-lg border bg-white p-4 text-center text-xs text-gray-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+          <div
+            key={i}
+            className="rounded-lg border bg-white p-4 text-center text-xs text-gray-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400"
+          >
             Trusted placeholder #{i + 1}
           </div>
         ))}
@@ -79,15 +82,21 @@ export default function LandingPage() {
       <section className="mt-16 grid gap-6 md:grid-cols-3">
         <div className="rounded-2xl border bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
           <h3 className="text-lg font-semibold">Financial overview</h3>
-          <p className="mt-2 text-sm text-gray-600 dark:text-slate-300">Clear charts for assets, liabilities, and net worth with clean separators and brand colors.</p>
+          <p className="mt-2 text-sm text-gray-600 dark:text-slate-300">
+            Clear charts for assets, liabilities, and net worth with clean separators and brand colors.
+          </p>
         </div>
         <div className="rounded-2xl border bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
           <h3 className="text-lg font-semibold">Secure locker</h3>
-          <p className="mt-2 text-sm text-gray-600 dark:text-slate-300">Store important files with client-side encryption and link them to assets or policies.</p>
+          <p className="mt-2 text-sm text-gray-600 dark:text-slate-300">
+            Store important files with client-side encryption and link them to assets or policies.
+          </p>
         </div>
         <div className="rounded-2xl border bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
           <h3 className="text-lg font-semibold">Emergency ready</h3>
-          <p className="mt-2 text-sm text-gray-600 dark:text-slate-300">Insurance tracker, contacts, and reminders so your family has what they need.</p>
+          <p className="mt-2 text-sm text-gray-600 dark:text-slate-300">
+            Insurance tracker, contacts, and reminders so your family has what they need.
+          </p>
         </div>
       </section>
 
