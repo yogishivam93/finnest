@@ -9,6 +9,7 @@ import InsightsPanel from "@/components/InsightsPanel";
 import DashboardShell from "@/components/DashboardShell";
 import RequireAuth from "@/components/RequireAuth";
 import AssetDetailsModal from "@/components/AssetDetailsModal";
+import FeatureSearchSection from "@/components/FeatureSearchSection";
 
 export default function DashboardPage() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -17,6 +18,7 @@ export default function DashboardPage() {
       <DashboardShell>
         <div className="space-y-6">
           <ActionBar />
+          <FeatureSearchSection />
 
         {/* Charts at the top (full width) */}
         <section className="space-y-2">

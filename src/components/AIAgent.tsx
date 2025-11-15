@@ -17,6 +17,7 @@ type Asset = {
 export default function AIAgent() {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const disclaimerCopy = "Informational summary only – not financial advice.";
 
   async function load() {
     try {
@@ -71,7 +72,8 @@ export default function AIAgent() {
 
   return (
     <section className="rounded-2xl border bg-white p-4 shadow-sm">
-      <h2 className="mb-3 text-lg font-semibold">AI Insights</h2>
+      <h2 className="text-lg font-semibold">AI Portfolio Summary</h2>
+      <p className="-mt-1 mb-3 text-xs text-gray-500">{disclaimerCopy}</p>
 
       {error ? (
         <p className="text-sm text-red-600">{error}</p>
@@ -88,9 +90,9 @@ export default function AIAgent() {
           </p>
 
           <div className="rounded-xl bg-gray-50 p-3 text-sm text-gray-700">
-            💡 Tip: Your largest category appears to be{" "}
-            <b>{topType}</b>. Consider diversifying across 2–3 categories and
-            reviewing currency exposure.
+            🔎 Observation: Your largest category appears to be <b>{topType}</b>,
+            representing the highest share of tracked assets. Note this is an
+            informational view only and does not include investment guidance.
           </div>
         </>
       )}

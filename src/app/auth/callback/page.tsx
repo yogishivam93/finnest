@@ -54,6 +54,22 @@ function CallbackContent() {
         return;
       }
 
+      try {
+        // Ensure profile row exists; if not, try to use any pending_username captured at signup
+        const { data: u } = await supabase.auth.getUser();
+        const uid = u?.user?.id;
+        if (uid) {
+          const { data: p } = await supabase.from("profiles").select("id").eq("id", uid).maybeSingle();
+          if (!p) {
+            const pending = typeof localStorage !== "undefined" ? localStorage.getItem("pending_username") : null;
+            if (pending && pending.trim().length >= 3) {
+              await supabase.from("profiles").upsert({ id: uid, username: pending.trim() });
+              try { localStorage.removeItem("pending_username"); } catch {}
+            }
+          }
+        }
+      } catch {}
+
       setMsg("Signed in! Redirecting...");
       try {
         // Set a lightweight cookie used by middleware as an auth hint

@@ -83,12 +83,22 @@ export default function LandingPage() {
         </div>
         <div className="rounded-2xl border bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
           <h3 className="text-lg font-semibold">Secure locker</h3>
-          <p className="mt-2 text-sm text-gray-600 dark:text-slate-300">Store important files with client‑side encryption and link them to assets or policies.</p>
+          <p className="mt-2 text-sm text-gray-600 dark:text-slate-300">Store important files with client-side encryption and link them to assets or policies.</p>
         </div>
         <div className="rounded-2xl border bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
           <h3 className="text-lg font-semibold">Emergency ready</h3>
           <p className="mt-2 text-sm text-gray-600 dark:text-slate-300">Insurance tracker, contacts, and reminders so your family has what they need.</p>
         </div>
+      </section>
+
+      <section className="mt-12 rounded-2xl border bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-slate-100">Security &amp; privacy (MVP)</h3>
+        <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-gray-700 dark:text-slate-300">
+          <li>Your connection to FinNest is protected with HTTPS (the padlock in your browser).</li>
+          <li>Your account is secured using email + password via Supabase Auth.</li>
+          <li>Your data lives in a secure cloud database with encryption at rest and in transit.</li>
+          <li>This is an early-stage product; please avoid entering very sensitive identifiers (full account numbers, tax IDs) during testing.</li>
+        </ul>
       </section>
     </main>
   );
