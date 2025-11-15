@@ -210,9 +210,9 @@ export async function POST(req: NextRequest) {
       ? body.emergencyContacts
       : [];
     const documents = Array.isArray(body?.documents) ? body.documents : [];
-    const insurance = (Array.isArray(body?.insurance)
+    const insurance: InsuranceRecord[] = Array.isArray(body?.insurance)
       ? (body.insurance as InsuranceRecord[])
-      : []) as InsuranceRecord[];
+      : [];
     const displayCurrency = body?.currency || "USD";
 
     const total = assets.reduce(
