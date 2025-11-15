@@ -243,7 +243,7 @@ export async function POST(req: NextRequest) {
 
     const now = new Date();
     const insuranceWithDays = insurance
-      .map((policy) => {
+      .map((policy: InsuranceRecord) => {
         const end = policy?.endDate ? new Date(policy.endDate) : null;
         if (!end || Number.isNaN(end.getTime())) return null;
         const days = Math.round((end.getTime() - now.getTime()) / 86400000);
