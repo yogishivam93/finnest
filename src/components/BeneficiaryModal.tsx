@@ -86,7 +86,6 @@ export default function BeneficiaryModal({ open, onClose, onSaved, beneficiary }
             name: name.trim(),
             relationship,
             email: email.trim() || null,
-            country,
             updated_at: new Date().toISOString(),
           })
           .eq("id", beneficiary.id)
@@ -103,7 +102,6 @@ export default function BeneficiaryModal({ open, onClose, onSaved, beneficiary }
               name: name.trim(),
               relationship,
               email: email.trim() || null,
-              country,
               created_at: new Date().toISOString(),
             },
           ]);

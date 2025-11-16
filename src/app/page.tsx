@@ -9,7 +9,7 @@ export default function LandingPage() {
           </h1>
           <p className="mt-4 text-lg text-gray-600 dark:text-slate-300">
             FinNest helps you track assets and liabilities, store critical documents securely, and share
-            the right information with the right people—especially in emergencies.
+            the right information with the right people.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
