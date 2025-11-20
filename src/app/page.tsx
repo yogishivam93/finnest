@@ -81,12 +81,12 @@ export default function LandingPage() {
                 Log in
               </Link>
             </div>
-            <div className="mt-6 text-sm text-slate-600">
-              <p className="text-sm font-semibold text-slate-800">
-                ✨ <strong>Early access</strong>: Help shape the next version of FinNest.
-              </p>
-              <Link href="/signup" className="text-xs font-semibold text-slate-700 hover:text-slate-900">
-                Join the waitlist →
+            <div className="mt-6 flex flex-col items-center gap-3">
+              <Link
+                href="/signup"
+                className="inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-2 text-xs font-semibold uppercase tracking-wide text-slate-700 transition hover:border-slate-500"
+              >
+                Join the waitlist
               </Link>
             </div>
           </div>
