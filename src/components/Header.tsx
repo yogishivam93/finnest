@@ -19,10 +19,10 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
-      <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between text-gray-900 dark:text-slate-100">
+      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 text-gray-900 dark:text-slate-100 lg:flex-row lg:items-center lg:justify-between">
         <Link href="/" className="font-bold text-xl">FinNest</Link>
 
-        <nav className="flex items-center gap-2">
+        <nav className="flex flex-wrap items-center justify-end gap-1 text-sm text-gray-900 dark:text-slate-100 lg:gap-2">
           {/* Dashboard */}
           <Link href="/dashboard" className={linkClass(isActive(["/dashboard"]))}>Dashboard</Link>
 
@@ -50,7 +50,9 @@ export default function Header() {
           <Link href="/settings" className={linkClass(isActive(["/settings"]))}>Settings</Link>
         </nav>
 
-        <AuthButtons />
+        <div className="flex justify-end">
+          <AuthButtons />
+        </div>
       </div>
     </header>
   );
