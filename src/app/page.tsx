@@ -65,15 +65,15 @@ export default function LandingPage() {
               All your finances, documents, and family access in one beautiful control center.
             </h1>
             <p className="text-lg text-slate-600">
-              FinNest gives you real-time clarity on assets, liabilities, insurance, and emergency plans
-              while letting you share only what matters with the people you trust.
+              FinNest helps you track assets, liabilities, insurance, and important documents in one secure place.
+              You choose what to share and who sees it, so your family and advisors always have what they need.
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <Link
                 href="/signup"
                 className="rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-500"
               >
-                Get started — it's free
+                Get started for free
               </Link>
               <Link
                 href="/login"
@@ -82,11 +82,21 @@ export default function LandingPage() {
                 Log in
               </Link>
               <Link
-                href="#pricing"
+                href="#security"
                 className="flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1 text-xs uppercase tracking-[0.4em] text-slate-500 hover:border-slate-400"
               >
                 <span className="text-[11px] font-semibold">Plan</span>
                 <span className="text-[11px]">Join waitlist</span>
+              </Link>
+            </div>
+            <div className="mt-3 space-y-2 rounded-2xl border border-dashed border-slate-200/80 bg-white/40 px-4 py-3 text-xs uppercase tracking-[0.3em] text-slate-500 md:px-6">
+              <p className="text-[10px] font-semibold text-slate-500">Early Access is open</p>
+              <p className="text-[12px] text-slate-600">FinNest is free while we refine the experience with our first group of families and advisors.</p>
+              <Link
+                href="/signup"
+                className="inline-flex items-center justify-center rounded-full border border-slate-200 px-4 py-1 text-xs font-semibold text-slate-700 hover:border-slate-400"
+              >
+                Join the waitlist
               </Link>
             </div>
           </div>
@@ -163,20 +173,6 @@ export default function LandingPage() {
           <p className="text-xs text-slate-500">MVP warning: Please avoid entering super-sensitive identifiers (full account numbers, SSNs) while we continue improving the experience.</p>
         </section>
 
-        <section id="pricing" className="rounded-3xl border border-slate-200 bg-gradient-to-br from-blue-50/60 to-white p-6 shadow-lg">
-          <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Plan</p>
-          <h3 className="mt-2 text-2xl font-semibold text-slate-900">Early Access</h3>
-          <p className="mt-2 text-sm text-slate-600">Free while we polish the experience for families and advisors.</p>
-          <div className="mt-5 flex items-center gap-4">
-            <Link
-              href="/signup"
-              className="rounded-full bg-slate-900 px-6 py-2 text-sm font-semibold uppercase tracking-wide text-white shadow-lg shadow-slate-900/30"
-            >
-              Join waitlist
-            </Link>
-            <div className="rounded-full border border-slate-200 px-4 py-1 text-xs text-slate-500">No credit card needed</div>
-          </div>
-        </section>
       </main>
     </div>
   );
