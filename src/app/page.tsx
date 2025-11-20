@@ -81,6 +81,13 @@ export default function LandingPage() {
               >
                 Log in
               </Link>
+              <Link
+                href="#pricing"
+                className="flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1 text-xs uppercase tracking-[0.4em] text-slate-500 hover:border-slate-400"
+              >
+                <span className="text-[11px] font-semibold">Plan</span>
+                <span className="text-[11px]">Join waitlist</span>
+              </Link>
             </div>
           </div>
           <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-blue-500/10 via-white to-slate-50 p-6 shadow-xl shadow-blue-500/10">
