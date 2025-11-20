@@ -89,16 +89,13 @@ export default function LandingPage() {
                 <span className="text-[11px]">Join waitlist</span>
               </Link>
             </div>
-            <div className="mt-3 space-y-2 rounded-2xl border border-dashed border-slate-200/80 bg-white/40 px-4 py-3 text-xs uppercase tracking-[0.3em] text-slate-500 md:px-6">
-              <p className="text-[10px] font-semibold text-slate-500">Early Access is open</p>
-              <p className="text-[12px] text-slate-600">FinNest is free while we refine the experience with our first group of families and advisors.</p>
-              <Link
-                href="/signup"
-                className="inline-flex items-center justify-center rounded-full border border-slate-200 px-4 py-1 text-xs font-semibold text-slate-700 hover:border-slate-400"
-              >
-                Join the waitlist
-              </Link>
-            </div>
+            <Link
+              href="/signup"
+              className="text-xs text-slate-500 hover:text-slate-700"
+            >
+              Want early access to upcoming features?
+              <span className="block font-semibold text-slate-800">Join the waitlist</span>
+            </Link>
           </div>
           <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-blue-500/10 via-white to-slate-50 p-6 shadow-xl shadow-blue-500/10">
             <div className="text-sm font-semibold uppercase tracking-[0.4em] text-slate-500">FinNest preview</div>
