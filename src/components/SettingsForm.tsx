@@ -8,11 +8,24 @@ const currencies = ["AUD", "USD", "INR", "EUR", "GBP", "NZD"];
 const themes = ["light", "dark"] as const;
 type Theme = typeof themes[number];
 
+type FormState = {
+  currency: string;
+  theme: Theme;
+  email: string;
+  phone: string;
+  displayName: string;
+};
+
 export default function SettingsForm() {
   const { currency, setCurrency } = useCurrency();
   const [userId, setUserId] = useState<string | null>(null);
-  const [formCurrency, setFormCurrency] = useState<string>(currency || "AUD");
-  const [theme, setTheme] = useState<Theme>("light");
+  const [form, setForm] = useState<FormState>({
+    currency: currency || "AUD",
+    theme: "light",
+    email: "",
+    phone: "",
+    displayName: "",
+  });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
@@ -30,24 +43,25 @@ export default function SettingsForm() {
           return;
         }
         setUserId(uid);
-
-        // Try to load profile from a `profiles` table if present.
         const { data, error } = await supabase
           .from("profiles")
-          .select("display_currency, theme")
+          .select("display_currency, theme, email, phone, display_name")
           .eq("id", uid)
           .maybeSingle();
 
         if (!error && data) {
-          const c = (data as any).display_currency as string | null;
-          const t = ((data as any).theme as Theme | null) ?? null;
-          if (c) {
-            setFormCurrency(c);
-          }
-          if (t && themes.includes(t)) setTheme(t);
+          const molded = data as any;
+          setForm((prev) => ({
+            ...prev,
+            currency: (molded.display_currency as string | null) || prev.currency,
+            theme: themes.includes(molded.theme) ? (molded.theme as Theme) : prev.theme,
+            email: molded.email ?? prev.email,
+            phone: molded.phone ?? prev.phone,
+            displayName: molded.display_name ?? prev.displayName,
+          }));
         }
       } catch {
-        // best-effort; ignore
+        // ignore
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -68,34 +82,34 @@ export default function SettingsForm() {
     } catch {}
   }
 
+  const handleInputChange = (field: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const value = e.target.value;
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
   async function onSave(e: React.FormEvent) {
     e.preventDefault();
     setMsg(null);
     setSaving(true);
     try {
-      // Update context + localStorage immediately for UX
-      setCurrency(formCurrency);
+      setCurrency(form.currency);
       try {
-        localStorage.setItem("displayCurrency", formCurrency);
-        localStorage.setItem("theme", theme);
+        localStorage.setItem("displayCurrency", form.currency);
+        localStorage.setItem("theme", form.theme);
       } catch {}
-      applyTheme(theme);
+      applyTheme(form.theme);
 
       if (userId) {
-        // Upsert into `profiles` if table exists.
-        const { error } = await supabase
-          .from("profiles")
-          .upsert(
-            [
-              {
-                id: userId,
-                display_currency: formCurrency,
-                theme,
-                updated_at: new Date().toISOString(),
-              },
-            ],
-            { onConflict: "id" }
-          );
+        const payload = {
+          id: userId,
+          display_currency: form.currency,
+          theme: form.theme,
+          email: form.email,
+          phone: form.phone,
+          display_name: form.displayName,
+          updated_at: new Date().toISOString(),
+        };
+        const { error } = await supabase.from("profiles").upsert([payload], { onConflict: "id" });
         if (error && !String(error.message || "").includes("relation \"profiles\" does not exist")) {
           throw error;
         }
@@ -109,10 +123,12 @@ export default function SettingsForm() {
   }
 
   return (
-    <form onSubmit={onSave} className="max-w-xl space-y-5">
+    <form onSubmit={onSave} className="max-w-4xl space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold">Settings</h1>
-        <p className="mt-1 text-sm text-gray-500">Personalize your FinNest experience</p>
+        <h1 className="text-3xl font-semibold">Your Profile & Preferences</h1>
+        <p className="mt-1 text-sm text-gray-500">
+          Keep your personal information up to date and control how FinNest looks.
+        </p>
       </div>
 
       {msg && (
@@ -121,11 +137,41 @@ export default function SettingsForm() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
+          <label className="mb-1 block text-sm font-medium">Name</label>
+          <input
+            type="text"
+            className="w-full rounded-md border px-3 py-2 text-sm"
+            value={form.displayName}
+            onChange={handleInputChange("displayName")}
+            disabled={loading || saving}
+          />
+        </div>
+        <div>
+          <label className="mb-1 block text-sm font-medium">Email</label>
+          <input
+            type="email"
+            className="w-full rounded-md border px-3 py-2 text-sm"
+            value={form.email}
+            onChange={handleInputChange("email")}
+            disabled={loading || saving}
+          />
+        </div>
+        <div>
+          <label className="mb-1 block text-sm font-medium">Phone</label>
+          <input
+            type="tel"
+            className="w-full rounded-md border px-3 py-2 text-sm"
+            value={form.phone}
+            onChange={handleInputChange("phone")}
+            disabled={loading || saving}
+          />
+        </div>
+        <div>
           <label className="mb-1 block text-sm font-medium">Default Currency</label>
           <select
             className="w-full rounded-md border px-3 py-2 text-sm"
-            value={formCurrency}
-            onChange={(e) => setFormCurrency(e.target.value)}
+            value={form.currency}
+            onChange={handleInputChange("currency")}
             disabled={loading || saving}
           >
             {currencies.map((c) => (
@@ -135,13 +181,12 @@ export default function SettingsForm() {
             ))}
           </select>
         </div>
-
         <div>
           <label className="mb-1 block text-sm font-medium">Theme</label>
           <select
             className="w-full rounded-md border px-3 py-2 text-sm"
-            value={theme}
-            onChange={(e) => setTheme(e.target.value as Theme)}
+            value={form.theme}
+            onChange={handleInputChange("theme")}
             disabled={loading || saving}
           >
             {themes.map((t) => (
@@ -153,16 +198,31 @@ export default function SettingsForm() {
         </div>
       </div>
 
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="rounded-2xl border bg-white/80 p-4">
+          <h3 className="text-sm font-semibold text-gray-900">Security</h3>
+          <p className="mt-1 text-xs text-gray-500">
+            Email-based authentication via Supabase keeps your account protected. You can link MFA or SSO
+            separately.
+          </p>
+        </div>
+        <div className="rounded-2xl border bg-white/80 p-4">
+          <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
+          <p className="mt-1 text-xs text-gray-500">
+            Receive alerts when assets move or documents are shared. We’ll build this out soon—check back later.
+          </p>
+        </div>
+      </div>
+
       <div className="flex gap-2">
         <button
           type="submit"
           disabled={saving}
           className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700 disabled:opacity-60"
         >
-          {saving ? "Saving..." : "Save Settings"}
+          {saving ? "Saving..." : "Save Preferences"}
         </button>
       </div>
     </form>
   );
 }
-
