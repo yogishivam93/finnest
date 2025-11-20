@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ShieldCheck, Sparkles, UserGroup, Globe } from "lucide-react";
+import { ShieldCheck, Sparkles, Users, Globe } from "lucide-react";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -23,7 +23,7 @@ const features = [
   {
     title: "Share with family & advisors",
     description: "Give access only to the right people, exactly when they need it.",
-    icon: UserGroup,
+    icon: Users,
   },
 ];
 
