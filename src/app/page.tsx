@@ -81,9 +81,17 @@ export default function LandingPage() {
                 Log in
               </Link>
             </div>
-            <div className="mt-6 text-xs uppercase tracking-[0.3em] text-slate-500">
-              Help shape the next version of FinNest.
-              <Link href="/signup" className="mt-1 block text-[11px] font-semibold text-slate-700 underline-offset-2 hover:text-slate-900">
+            <div className="mt-6 flex flex-col gap-2 rounded-2xl border border-slate-200/70 bg-white/80 px-5 py-3 text-sm text-slate-600 shadow-sm md:flex-row md:items-center md:justify-between">
+              <div className="flex items-center gap-3">
+                <span className="rounded-full border border-slate-200 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+                  Early access
+                </span>
+                <p className="text-[13px] font-medium text-slate-700">Help shape the next version of FinNest.</p>
+              </div>
+              <Link
+                href="/signup"
+                className="rounded-full border border-slate-400 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-slate-800 transition hover:border-slate-600"
+              >
                 Join the waitlist
               </Link>
             </div>
@@ -153,14 +161,26 @@ export default function LandingPage() {
             </div>
             <Globe className="h-8 w-8 text-blue-500" />
           </div>
-          <div className="grid gap-4 text-sm text-slate-600 md:grid-cols-3">
-            <p>Encrypted at rest and in transit with multi-region keys</p>
-            <p>Granular access controls for every beneficiary and advisor</p>
-            <p>Real-time monitoring and tamper-proof activity logs</p>
+          <div className="grid gap-5 text-sm text-slate-600 md:grid-cols-3">
+            {[
+              "Encrypted at rest and in transit using multi-region keys",
+              "Fine-grained sharing controls for every family member and advisor",
+              "Tamper-proof activity logs for complete transparency",
+            ].map((point) => (
+              <div
+                key={point}
+                className="flex flex-col gap-2 rounded-2xl border border-slate-200/60 bg-white/70 p-4 text-slate-600 backdrop-blur"
+              >
+                <div className="h-1 w-10 rounded-full bg-gradient-to-r from-blue-500 to-sky-400" />
+                <p className="text-sm text-slate-600">{point}</p>
+              </div>
+            ))}
           </div>
-          <p className="text-xs text-slate-500">
-            FinNest is still in Early Access. Please avoid entering highly sensitive identifiers while we continue improving the platform.
-          </p>
+          <div className="marquee text-xs text-slate-500">
+            <span>
+              FinNest is still in Early Access. Please avoid entering highly sensitive identifiers while we continue improving the platform.
+            </span>
+          </div>
         </section>
 
       </main>
