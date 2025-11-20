@@ -25,10 +25,10 @@ export default function FeatureSearchSection() {
         </div>
       </div>
 
-      <div className="mt-4 flex gap-2">
+      <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
         <input
           type="search"
-          className="flex-1 rounded-md border px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500 dark:border-slate-700"
+          className="flex-1 min-w-0 rounded-md border px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500 dark:border-slate-700"
           placeholder="Search by name, type, institution, currency, document, or keyword…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -41,7 +41,7 @@ export default function FeatureSearchSection() {
         />
         <button
           onClick={handleSubmit}
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 sm:w-auto"
         >
           Search
         </button>
