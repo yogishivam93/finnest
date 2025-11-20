@@ -8,6 +8,10 @@ import { supabase } from "@/lib/supabase";
 
 export default function Header() {
   const pathname = usePathname();
+  const hideHeaderRoutes = ["/"];
+  if (hideHeaderRoutes.some((route) => pathname === route)) {
+    return null;
+  }
   const authRoutes = ["/login", "/signup", "/auth"];
   const isAuthRoute = authRoutes.some((route) => pathname === route || pathname.startsWith(route + "/"));
   const hasNav = !isAuthRoute;

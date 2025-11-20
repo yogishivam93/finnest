@@ -20,6 +20,33 @@ body {
   transition: background-color 200ms ease, color 200ms ease;
 }
 
+.marquee {
+  overflow: hidden;
+  position: relative;
+  height: 1rem;
+}
+.marquee::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.marquee span {
+  white-space: nowrap;
+  display: inline-block;
+  animation: marquee 18s linear infinite;
+}
+.marquee:hover span {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 /* Top bar */
 .topbar {
   position: sticky;
