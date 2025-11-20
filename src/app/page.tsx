@@ -81,7 +81,10 @@ export default function LandingPage() {
                 Log in
               </Link>
             </div>
-            <div className="mt-6 flex flex-col items-center gap-3">
+            <div className="mt-6 flex flex-col items-center gap-2 text-center">
+              <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">
+                Want early access to upcoming features?
+              </p>
               <Link
                 href="/signup"
                 className="inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-2 text-xs font-semibold uppercase tracking-wide text-slate-700 transition hover:border-slate-500"
