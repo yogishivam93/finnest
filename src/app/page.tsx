@@ -12,16 +12,16 @@ const navLinks = [
 const features = [
   {
     title: "Track your wealth effortlessly",
-    description: "Real-time assets, liabilities, and net worth tracking you can trust.",
+    description: "See assets, liabilities, and net worth in real time, all in one place.",
     icon: Sparkles,
   },
   {
     title: "Store documents securely",
-    description: "Bank-level encryption for documents linked to assets, policies, and trusts.",
+    description: "Keep important files safe with encryption and link them to your assets and policies.",
     icon: ShieldCheck,
   },
   {
-    title: "Share with family & advisors",
+    title: "Share with family and advisors",
     description: "Give access only to the right people, exactly when they need it.",
     icon: Users,
   },
@@ -60,7 +60,6 @@ export default function LandingPage() {
       <main className="mx-auto flex max-w-6xl flex-col gap-16 px-4 py-12 md:py-20">
         <section className="grid gap-10 md:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-6">
-            <p className="text-xs uppercase tracking-[0.35em] text-slate-500">FinNest</p>
             <h1 className="text-4xl font-extrabold leading-tight text-slate-900 sm:text-5xl">
               All your finances, documents, and family access in one beautiful control center.
             </h1>
@@ -81,21 +80,13 @@ export default function LandingPage() {
               >
                 Log in
               </Link>
-              <Link
-                href="#security"
-                className="flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1 text-xs uppercase tracking-[0.4em] text-slate-500 hover:border-slate-400"
-              >
-                <span className="text-[11px] font-semibold">Plan</span>
-                <span className="text-[11px]">Join waitlist</span>
+            </div>
+            <div className="mt-6 text-xs uppercase tracking-[0.3em] text-slate-500">
+              Help shape the next version of FinNest.
+              <Link href="/signup" className="mt-1 block text-[11px] font-semibold text-slate-700 underline-offset-2 hover:text-slate-900">
+                Join the waitlist
               </Link>
             </div>
-            <Link
-              href="/signup"
-              className="text-xs text-slate-500 hover:text-slate-700"
-            >
-              Want early access to upcoming features?
-              <span className="block font-semibold text-slate-800">Join the waitlist</span>
-            </Link>
           </div>
           <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-blue-500/10 via-white to-slate-50 p-6 shadow-xl shadow-blue-500/10">
             <div className="text-sm font-semibold uppercase tracking-[0.4em] text-slate-500">FinNest preview</div>
@@ -163,11 +154,13 @@ export default function LandingPage() {
             <Globe className="h-8 w-8 text-blue-500" />
           </div>
           <div className="grid gap-4 text-sm text-slate-600 md:grid-cols-3">
-            <p>Encrypted at rest and in transit with multi-region keys.</p>
-            <p>Granular access controls for each beneficiary or advisor.</p>
-            <p>Realtime monitoring & alerts with tamper-proof logs.</p>
+            <p>Encrypted at rest and in transit with multi-region keys</p>
+            <p>Granular access controls for every beneficiary and advisor</p>
+            <p>Real-time monitoring and tamper-proof activity logs</p>
           </div>
-          <p className="text-xs text-slate-500">MVP warning: Please avoid entering super-sensitive identifiers (full account numbers, SSNs) while we continue improving the experience.</p>
+          <p className="text-xs text-slate-500">
+            FinNest is still in Early Access. Please avoid entering highly sensitive identifiers while we continue improving the platform.
+          </p>
         </section>
 
       </main>
