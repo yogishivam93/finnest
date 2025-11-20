@@ -25,13 +25,12 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 text-gray-900 dark:text-slate-100">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 text-gray-900 dark:text-slate-100">
         <Link href="/" className="font-bold text-xl">
           FinNest
         </Link>
-
         {hasNav && (
-          <nav className="flex flex-1 items-center justify-center gap-2 overflow-x-auto whitespace-nowrap px-2 text-sm text-gray-900 dark:text-slate-100">
+          <nav className="hidden flex-1 items-center justify-center gap-2 overflow-x-auto whitespace-nowrap px-2 text-sm text-gray-900 dark:text-slate-100 md:flex">
             <Link href="/dashboard" className={linkClass(isActive(["/dashboard"]))}>
               Dashboard
             </Link>
@@ -87,7 +86,7 @@ export default function Header() {
           </nav>
         )}
 
-        <div className="flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-2">
           <AuthButtons forceAuthLinks={isAuthRoute} />
         </div>
       </div>
