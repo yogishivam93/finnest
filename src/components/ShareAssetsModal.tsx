@@ -14,14 +14,18 @@ type Props = {
 };
 
 type AssetRow = { id: number; name: string | null; current_value: number | null; currency: string | null };
-type Person = { id: number; name: string | null };
+type Person = { id: string; name: string | null; email?: string | null };
 
-export default function ShareAssetsModal({ open, onClose, initialTab = "beneficiary" }: Props) {
+export default function ShareAssetsModal({
+  open,
+  onClose,
+  initialTab = "beneficiary",
+}: Props) {
   const { format, convert } = useCurrency();
   const [tab, setTab] = useState<"beneficiary" | "advisor">(initialTab);
   const [assets, setAssets] = useState<AssetRow[]>([]);
   const [beneficiaries, setBeneficiaries] = useState<Person[]>([]);
-  const [selectedBeneficiary, setSelectedBeneficiary] = useState<number | "">("");
+  const [selectedBeneficiary, setSelectedBeneficiary] = useState<string>("");
   const [selectedAssetIds, setSelectedAssetIds] = useState<number[]>([]);
   const [permView, setPermView] = useState(true);
   const [permDownload, setPermDownload] = useState(true);
@@ -51,9 +55,9 @@ export default function ShareAssetsModal({ open, onClose, initialTab = "benefici
       const { data: a } = uid ? await aq.eq("owner_id", uid) : await aq;
       if (!cancelled) setAssets((a ?? []) as AssetRow[]);
 
-      const bq = supabase.from("beneficiaries").select("id,name").order("name", { ascending: true });
-      const { data: b } = uid ? await bq.eq("owner_id", uid) : await bq;
-      if (!cancelled) setBeneficiaries((b ?? []) as Person[]);
+      const bq = supabase.from("beneficiaries").select("id,name,email").order("name", { ascending: true });
+        const { data: b } = uid ? await bq.eq("owner_id", uid) : await bq;
+        if (!cancelled) setBeneficiaries((b ?? []) as Person[]);
 
       // Advisors (optional table). If missing, we silently ignore.
       try {
@@ -110,7 +114,7 @@ export default function ShareAssetsModal({ open, onClose, initialTab = "benefici
 
       const payload = {
         tab,
-        beneficiaryId: tab === "beneficiary" ? selectedBeneficiary : null,
+      beneficiaryId: tab === "beneficiary" ? selectedBeneficiary || null : null,
         advisorId: tab === "advisor" ? selectedAdvisor : null,
         assets: selectedAssetIds,
         permissions: { view: permView, download: permDownload },
@@ -186,11 +190,11 @@ export default function ShareAssetsModal({ open, onClose, initialTab = "benefici
                 onChange={(e) => setBeneficiaryQuery(e.target.value)}
                 className="mb-2 w-full rounded-md border px-3 py-2 text-sm"
               />
-              <select
-                className="w-full rounded-md border px-3 py-2 text-sm"
-                value={selectedBeneficiary as any}
-                onChange={(e) => setSelectedBeneficiary(Number(e.target.value) || "")}
-              >
+                <select
+                  className="w-full rounded-md border px-3 py-2 text-sm"
+                  value={selectedBeneficiary}
+                  onChange={(e) => setSelectedBeneficiary(e.target.value)}
+                >
                 <option value="">Choose a beneficiary</option>
                 {filteredBeneficiaries.map((b) => (
                   <option key={b.id} value={b.id}>

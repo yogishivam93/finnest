@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { getCurrentUID } from "@/lib/auth";
 
@@ -30,7 +30,7 @@ export default function InsuranceModal({
   onSaved?: () => void;
 }) {
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState<Policy>({
+  const DEFAULT_FORM: Policy = {
     type: null,
     provider: null,
     policy_number: null,
@@ -40,12 +40,22 @@ export default function InsuranceModal({
     end_date: null,
     contact: null,
     notes: null,
-  });
+  };
+
+  const [form, setForm] = useState<Policy>(DEFAULT_FORM);
+  const providerRef = useRef<HTMLInputElement | null>(null);
+  const handleChange = (
+    field: keyof Policy,
+    value: string | number | null
+  ) => {
+    setForm((f) => ({ ...f, [field]: value }));
+  };
 
   useEffect(() => {
-    if (initial) setForm({ ...form, ...initial });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initial]);
+    if (open) {
+      setForm(initial ? { ...DEFAULT_FORM, ...initial } : DEFAULT_FORM);
+    }
+  }, [open, initial]);
 
   if (!open) return null;
 
@@ -116,9 +126,10 @@ export default function InsuranceModal({
           </Input>
           <Input label="Provider">
             <input
+              ref={providerRef}
               className="mt-1 w-full rounded-md border border-gray-300 bg-white px-2 py-1.5 text-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
               value={form.provider ?? ""}
-              onChange={(e) => setForm((f) => ({ ...f, provider: e.target.value }))}
+              onChange={(e) => handleChange("provider", e.target.value)}
             />
           </Input>
           <Input label="Policy Number">
@@ -193,4 +204,3 @@ export default function InsuranceModal({
     </div>
   );
 }
-

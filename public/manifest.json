@@ -1,0 +1,21 @@
+{
+  "name": "FinNest Mobile",
+  "short_name": "FinNest",
+  "description": "Personal finance hub for assets, contacts, insurance, and emergency info.",
+  "start_url": "/mobile",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0ea5e9",
+  "icons": [
+    {
+      "src": "/icons/icon-192.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icons/icon-512.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
+    }
+  ]
+}
