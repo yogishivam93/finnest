@@ -81,18 +81,12 @@ export default function LandingPage() {
                 Log in
               </Link>
             </div>
-            <div className="mt-6 flex flex-col gap-2 rounded-2xl border border-slate-200/70 bg-white/80 px-5 py-3 text-sm text-slate-600 shadow-sm md:flex-row md:items-center md:justify-between">
-              <div className="flex items-center gap-3">
-                <span className="rounded-full border border-slate-200 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-slate-500">
-                  Early access
-                </span>
-                <p className="text-[13px] font-medium text-slate-700">Help shape the next version of FinNest.</p>
-              </div>
-              <Link
-                href="/signup"
-                className="rounded-full border border-slate-400 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-slate-800 transition hover:border-slate-600"
-              >
-                Join the waitlist
+            <div className="mt-6 text-sm text-slate-600">
+              <p className="text-sm font-semibold text-slate-800">
+                ✨ <strong>Early access</strong>: Help shape the next version of FinNest.
+              </p>
+              <Link href="/signup" className="text-xs font-semibold text-slate-700 hover:text-slate-900">
+                Join the waitlist →
               </Link>
             </div>
           </div>
