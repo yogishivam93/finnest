@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -118,7 +118,7 @@ export default function LandingPage() {
               href="/signup"
               className="rounded-full bg-blue-600 px-3.5 py-1.5 font-semibold text-white shadow-sm shadow-blue-400/30 transition hover:bg-blue-500 sm:px-4"
             >
-              Get started � it's free
+              Get started - it's free
             </Link>
           </div>
         </div>
@@ -275,7 +275,7 @@ export default function LandingPage() {
                   className="rounded-full p-2 text-slate-500 hover:bg-slate-100"
                   aria-label="Close waitlist form"
                 >
-                  ✕
+                  &times;
                 </button>
               </div>
 
@@ -295,7 +295,7 @@ export default function LandingPage() {
                 />
                 {waitlistError ? <p className="text-sm text-red-600">{waitlistError}</p> : null}
                 {waitlistSuccess ? (
-                  <p className="text-sm text-green-600">You’re on the list! Check your email for a welcome note.</p>
+                  <p className="text-sm text-green-600">You're on the list! Check your email for a welcome note.</p>
                 ) : null}
                 <button
                   type="submit"
@@ -313,5 +313,7 @@ export default function LandingPage() {
     </div>
   );
 }
+
+
 
 
