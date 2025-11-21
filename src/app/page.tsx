@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BarChart3, Globe, ShieldCheck, Sparkles, Users } from "lucide-react";
 
 const navLinks = [
@@ -40,6 +40,8 @@ export default function LandingPage() {
   const [waitlistError, setWaitlistError] = useState("");
   const [waitlistSubmitting, setWaitlistSubmitting] = useState(false);
   const [waitlistSuccess, setWaitlistSuccess] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState<any>(null);
+  const [installReady, setInstallReady] = useState(false);
 
   const validateEmail = (email: string) => /\S+@\S+\.\S+/.test(email);
 
@@ -75,10 +77,28 @@ export default function LandingPage() {
     }
   }
 
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e as any);
+      setInstallReady(true);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  async function handleInstallClick() {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    await installPrompt.userChoice.catch(() => null);
+    setInstallReady(false);
+    setInstallPrompt(null);
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <header className="border-b border-slate-200 bg-white/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+            <header className="border-b border-slate-200 bg-white/80 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-4 md:justify-between md:gap-6">
           <div className="text-2xl font-bold tracking-tight">FinNest</div>
           <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 md:flex">
             {navLinks.map((link) => (
@@ -87,18 +107,18 @@ export default function LandingPage() {
               </a>
             ))}
           </nav>
-          <div className="flex items-center gap-3 text-sm">
+          <div className="ml-auto flex items-center gap-2 text-sm sm:gap-3">
             <Link
               href="/login"
-              className="rounded-full border border-slate-200 px-4 py-1.5 font-semibold text-slate-700 hover:border-slate-400"
+              className="rounded-full border border-slate-200 px-3.5 py-1.5 font-semibold text-slate-700 hover:border-slate-400 sm:px-4"
             >
               Log in
             </Link>
             <Link
               href="/signup"
-              className="rounded-full bg-blue-600 px-4 py-1.5 font-semibold text-white shadow-sm shadow-blue-400/30 hover:bg-blue-500"
+              className="rounded-full bg-blue-600 px-3.5 py-1.5 font-semibold text-white shadow-sm shadow-blue-400/30 transition hover:bg-blue-500 sm:px-4"
             >
-              Get started â€” it's free
+              Get started — it's free
             </Link>
           </div>
         </div>
@@ -127,6 +147,15 @@ export default function LandingPage() {
               >
                 Log in
               </Link>
+              {installReady ? (
+                <button
+                  type="button"
+                  onClick={handleInstallClick}
+                  className="rounded-full border border-blue-200 bg-white px-4 py-3 text-sm font-semibold uppercase tracking-wide text-blue-700 shadow-sm hover:border-blue-400"
+                >
+                  Install app
+                </button>
+              ) : null}
             </div>
             <div className="mt-6 flex flex-col items-start gap-2 text-left">
               <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">
@@ -284,3 +313,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+
