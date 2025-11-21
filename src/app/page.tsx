@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ShieldCheck, Sparkles, Users, Globe } from "lucide-react";
+import { useState } from "react";
+import { BarChart3, Globe, ShieldCheck, Sparkles, Users } from "lucide-react";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -25,9 +26,55 @@ const features = [
     description: "Give access only to the right people, exactly when they need it.",
     icon: Users,
   },
+  {
+    title: "Smart dashboard and AI-powered insights",
+    description:
+      "See patterns and highlights across your accounts and documents at a glance, with AI surfacing what matters most. No advice, just clearer information.",
+    icon: BarChart3,
+  },
 ];
 
 export default function LandingPage() {
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
+  const [waitlistEmail, setWaitlistEmail] = useState("");
+  const [waitlistError, setWaitlistError] = useState("");
+  const [waitlistSubmitting, setWaitlistSubmitting] = useState(false);
+  const [waitlistSuccess, setWaitlistSuccess] = useState(false);
+
+  const validateEmail = (email: string) => /\S+@\S+\.\S+/.test(email);
+
+  async function submitWaitlist(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setWaitlistError("");
+    setWaitlistSuccess(false);
+
+    if (!validateEmail(waitlistEmail)) {
+      setWaitlistError("Please enter a valid email.");
+      return;
+    }
+
+    setWaitlistSubmitting(true);
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: waitlistEmail, source: "homepage" }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "Unable to join the waitlist right now.");
+      }
+
+      setWaitlistSuccess(true);
+      setWaitlistEmail("");
+    } catch (err) {
+      setWaitlistError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setWaitlistSubmitting(false);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <header className="border-b border-slate-200 bg-white/80 backdrop-blur">
@@ -81,16 +128,17 @@ export default function LandingPage() {
                 Log in
               </Link>
             </div>
-            <div className="mt-6 flex flex-col items-center gap-2 text-center">
+            <div className="mt-6 flex flex-col items-start gap-2 text-left">
               <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">
                 Want early access to upcoming features?
               </p>
-              <Link
-                href="/signup"
+              <button
+                type="button"
+                onClick={() => setWaitlistOpen(true)}
                 className="inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-2 text-xs font-semibold uppercase tracking-wide text-slate-700 transition hover:border-slate-500"
               >
                 Join the waitlist
-              </Link>
+              </button>
             </div>
           </div>
           <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-blue-500/10 via-white to-slate-50 p-6 shadow-xl shadow-blue-500/10">
@@ -134,7 +182,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="features" className="grid gap-6 md:grid-cols-3">
+        <section id="features" className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
@@ -179,6 +227,58 @@ export default function LandingPage() {
             </span>
           </div>
         </section>
+
+        {waitlistOpen && (
+          <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/30 px-4 backdrop-blur-sm">
+            <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Waitlist</p>
+                  <h3 className="text-lg font-semibold text-slate-900">Join the FinNest waitlist</h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setWaitlistOpen(false);
+                    setWaitlistError("");
+                    setWaitlistSuccess(false);
+                  }}
+                  className="rounded-full p-2 text-slate-500 hover:bg-slate-100"
+                  aria-label="Close waitlist form"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={submitWaitlist} className="mt-4 space-y-3">
+                <label className="block text-sm font-medium text-slate-700" htmlFor="waitlist-email">
+                  Email
+                </label>
+                <input
+                  id="waitlist-email"
+                  name="email"
+                  type="email"
+                  required
+                  value={waitlistEmail}
+                  onChange={(e) => setWaitlistEmail(e.target.value)}
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                  placeholder="you@example.com"
+                />
+                {waitlistError ? <p className="text-sm text-red-600">{waitlistError}</p> : null}
+                {waitlistSuccess ? (
+                  <p className="text-sm text-green-600">You’re on the list! Check your email for a welcome note.</p>
+                ) : null}
+                <button
+                  type="submit"
+                  disabled={waitlistSubmitting}
+                  className="flex w-full items-center justify-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-white shadow-sm shadow-blue-400/30 transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {waitlistSubmitting ? "Joining..." : "Join the waitlist"}
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
 
       </main>
     </div>
